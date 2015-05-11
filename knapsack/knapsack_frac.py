@@ -9,17 +9,18 @@ def greedy(sorted_items, k_weight, DEBUG=False):
     total_value = 0.0
     pack = []
 
-    for item_value, item_weight, item_name in sorted_items:
-        fraction = min(k_weight - total_weight, item_weight)
-        total_weight += fraction
-        total_value += (fraction * item_value)
+    for item_value, item_weight, item_name in sorted_items:  # Falta garantir que esse cara O (n log n), pq ele só até a capacidade da mochila
+        fraction = min(k_weight - total_weight, item_weight)  # O(n)
+        print fraction
+        total_weight += fraction # O(1)
+        total_value += (fraction * item_value) # O(1)
 
-        pack  += [(item_name, fraction, total_value)]
+        pack  += [(item_name, fraction, total_value)] # O(1)
 
         if(DEBUG):
             print("Adding => Item(Name: {0}, Fraction: {1}, Value {2})".format(item_name, fraction, (fraction * item_value)))
 
-        if total_weight >= k_weight:
+        if total_weight >= k_weight: # O(1)
             break
 
     print("Total Weight = {0}".format(total_weight))
@@ -28,7 +29,13 @@ def greedy(sorted_items, k_weight, DEBUG=False):
 
 
 def order(items):
-    return sorted(((value/weight, weight, name) for name, weight, value in items), reverse = True)
+    elements = []
+    for name, weight, value in items:  # O(n)
+        item = (value/weight, weight, name)   # O(1)
+        elements.append(item)  # O(1)
+
+    sort = sorted((elements), reverse = True) # O(n log n) + O(n)
+    return sort # O(n log n)
 
 def generate_items(size):
     items = []
