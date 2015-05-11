@@ -34,7 +34,7 @@ def order(items):
         item = (value/weight, weight, name)   # O(1)
         elements.append(item)  # O(1)
 
-    sort = sorted((elements), reverse = True) # O(n log n) + O(n)
+    sort = sorted((elements), reverse = True) # TimSort (Melhor caso O(n); Pior caso O(n log n)) + O(n)
     return sort # O(n log n)
 
 def generate_items(size):
