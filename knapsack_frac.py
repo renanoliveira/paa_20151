@@ -6,15 +6,15 @@ def greedy(sorted_items, k_weight, DEBUG=False):
     total_value = 0
     pack = []
 
-    for unit_value, weight, name in sorted_items:
-        fraction = min(k_weight - total_weight, weight)
+    for item_value, item_weight, item_name in sorted_items:
+        fraction = min(k_weight - total_weight, item_weight)
         total_weight += fraction
-        total_value += (fraction * unit_value)
+        total_value += (fraction * item_value)
 
-        pack  += [(name, fraction, total_value)]
+        pack  += [(item_name, fraction, total_value)]
 
         if(DEBUG):
-            print("Adding => Item(Name: {0}, Fraction: {1}, Value {2})".format(name, fraction, (fraction * unit_value)))
+            print("Adding => Item(Name: {0}, Fraction: {1}, Value {2})".format(item_name, fraction, (fraction * item_value)))
 
         if total_weight >= k_weight:
             break
