@@ -1,1 +1,3 @@
-# fractional_knapsack
+# Fractional Knapsack
+
+$ python knapsack_frac.py
