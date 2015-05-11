@@ -15,7 +15,6 @@ def greedy(sorted_items, k_weight):
             total_value += item_value # O(1)
         else:
             particial_weight = item_weight+total_weight # O(1)
-            particial_value = (particial_weight * item_value) # O(1)
             total_value += (particial_weight * item_value) # O(1)
 
             print("Adding => Item(Name: {0}, Weight: {1}, Value {2})".format(item_name, particial_weight, (particial_weight * item_value)))
