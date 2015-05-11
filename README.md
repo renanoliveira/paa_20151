@@ -17,9 +17,19 @@ http://www-di.inf.puc-rio.br/~poggi//paa151-t1.pdf
 
 # Como executar:
 
-* Para executar o problema 2.1:
+Para executar o problema 2.1
+
+- Modo Teste
 
 ```
-$ python knapsack/knapsack_frac.py
+$ python knapsack_frac.py test
 ```
 
+- Com geração de items
+
+```
+### Primeiro parâmentro é a capacidade da mochila
+### Segundo parâmentro é o número de items (gerara uma tupla com valores randomicos)
+
+python knapsack_frac.py 100.0 50000
+```
