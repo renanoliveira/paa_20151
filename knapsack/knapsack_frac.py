@@ -4,28 +4,25 @@
 import random
 import sys
 
-def greedy(sorted_items, k_weight, DEBUG=False):
-    total_weight = 0.0
-    total_value = 0.0
-    pack = []
+def greedy(sorted_items, k_weight):
+    total_weight = k_weight # O(1)
+    total_value = 0 # O(1)
 
-    for item_value, item_weight, item_name in sorted_items:  # Falta garantir que esse cara O (n log n), pq ele só até a capacidade da mochila
-        fraction = min(k_weight - total_weight, item_weight)  # O(n)
-        print fraction
-        total_weight += fraction # O(1)
-        total_value += (fraction * item_value) # O(1)
+    for item_value, item_weight, item_name in sorted_items: # O(n)
+        total_weight = total_weight - item_weight # O(1)
+        if (total_weight) > 0.0: # O(1)
+            print("Adding => Item(Name: {0}, Weight: {1}, Value {2})".format(item_name, item_weight, (item_weight * item_value)))
+            total_value += item_value # O(1)
+        else:
+            particial_weight = item_weight+total_weight # O(1)
+            particial_value = (particial_weight * item_value) # O(1)
+            total_value += (particial_weight * item_value) # O(1)
 
-        pack  += [(item_name, fraction, total_value)] # O(1)
-
-        if(DEBUG):
-            print("Adding => Item(Name: {0}, Fraction: {1}, Value {2})".format(item_name, fraction, (fraction * item_value)))
-
-        if total_weight >= k_weight: # O(1)
+            print("Adding => Item(Name: {0}, Weight: {1}, Value {2})".format(item_name, particial_weight, (particial_weight * item_value)))
             break
 
-    print("Total Weight = {0}".format(total_weight))
     print("Total Value = {0}".format(total_value))
-    return pack
+
 
 
 def order(items):
@@ -76,4 +73,4 @@ if __name__ == "__main__":
     else:
         print "==> Não encontrei um padrão"
 
-    print greedy(sorted_items, knapsack_weight, True)
+    greedy(sorted_items, knapsack_weight)
