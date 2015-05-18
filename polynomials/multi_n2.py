@@ -5,13 +5,16 @@ import random
 import sys
 
 def multiply_polynomials_in_n2(poly1, poly2):
-    res = [0]*(len(poly1)+len(poly2)-1)
-    for o1,i1 in enumerate(poly1):
-        for o2,i2 in enumerate(poly2):
-            res[o1+o2] += i1*i2
+    polynomials_size = len(poly1)+len(poly2)
+    buckets = [0]*(polynomials_size-1)
+    print("Buckets = {0}".format(buckets))
+    for index1, value1 in enumerate(poly1): # O(n)
+        for index2,value2 in enumerate(poly2): # O(n)
+            buckets[index1+index2] += value1*value2
+            print("Buckets = {0}".format(buckets))
 
-    print("Product of the polynomials = {0}".format(res))
-    return res
+    print("Product of the polynomials = {0}".format(buckets))
+    return buckets
 
 
 def generate_polynomial(size):
