@@ -51,12 +51,14 @@ if __name__ == "__main__":
     sorted_items = []
 
     if sys.argv[1] == "test":
-        print "===> Modo teste para validar alogritmo"
+        print("===> Modo teste para validar alogritmo")
         items = [
-            ("item1", 1.0, 2.0),
+             ("item1", 1.0, 2.0),
             ("item2", 1.0, 2.5),
             ("item3", 1.0, 3.0),
-            ("item4", 1.0, 4.0)
+            ("item4", 1.0, 4.0),
+            ("item5", 1.0, 1.0),
+            ("item6", 1.0, 5.0)
         ]
 
         knapsack_weight = 3.5
@@ -65,11 +67,11 @@ if __name__ == "__main__":
         knapsack_weight = float(sys.argv[1])
         item_size = int(sys.argv[2])
 
-        print "===> Gerar mochila com valorizes randomicos - "
-        print "===> {0} de peso e {1} items".format(knapsack_weight, item_size)
+        print("===> Gerar mochila com valorizes randomicos - ")
+        print("===> {0} de peso e {1} items".format(knapsack_weight, item_size))
 
         sorted_items = order(generate_items(item_size))
     else:
-        print "==> Não encontrei um padrão"
+        print("==> Não encontrei um padrão")
 
     greedy(sorted_items, knapsack_weight)
