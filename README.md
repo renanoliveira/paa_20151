@@ -9,8 +9,9 @@ http://www-di.inf.puc-rio.br/~poggi//paa151-t1.pdf
 
 ##2. Problema da Mochila Fracionária
 - 2.1 - DONE
-- 2.2 - TO-DO
-- 2.3 - TO-DO
+- 2.2 - DONE
+- 2.3 - DOING
+- DOCUMENTAÇÃO E EXPERIMENTAÇÃO - TODO
 
 ##3. Multiplicação de Polinômios
 - TO-DO
@@ -24,6 +25,8 @@ Para executar o problema 2.1
 ```
 $ python knapsack_frac.py test
 ```
+
+Obs: Para executar versão com mediana das medianas, knapscak_frac_b.py test
 
 - Com geração de items
 
