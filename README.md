@@ -10,8 +10,8 @@ http://www-di.inf.puc-rio.br/~poggi//paa151-t1.pdf
 ##2. Problema da Mochila Fracionária
 - 2.1 - DONE
 - 2.2 - DONE
-- 2.3 - DOING
-- DOCUMENTAÇÃO E EXPERIMENTAÇÃO - TODO
+- 2.3 - DONE
+- DOCUMENTAÇÃO E EXPERIMENTAÇÃO - DOING
 
 ##3. Multiplicação de Polinômios
 - TO-DO
