@@ -7,29 +7,25 @@ import sys
 
 def greedy(items, k_weight):
     sorted_items = order(items) #O(nlogn)
-
+    items_knapsack = []
     total_weight = k_weight # O(1)
-    total_value = 0 # O(1)
 
-    for item_value, item_weight, item_name in sorted_items: # O(n)
-        total_weight = total_weight - item_weight # O(1)
+    for item in sorted_items: # O(n)
+        total_weight = total_weight - item[2] # O(1)
         if (total_weight) > 0.0: # O(1)
-            #print("Adding => Item(Name: {0}, Weight: {1}, Value {2})".format(item_name, item_weight, (item_weight * item_value)))
-            total_value += item_value # O(1)
+            items_knapsack.append(item)
         else:
-            particial_weight = item_weight+total_weight # O(1)
-            total_value += (particial_weight * item_value) # O(1)
-
-            #print("Adding => Item(Name: {0}, Weight: {1}, Value {2})".format(item_name, particial_weight, (particial_weight * item_value)))
+            partial_weight = item[2]+total_weight # O(1)
+            partial_item = (item[1], partial_weight, (item[3]/item[2])*partial_weight)
+            items_knapsack.append(item)
             break
 
-    #print("Total Value = {0}".format(total_value))
-
+    return items_knapsack
 
 def order(items):
     elements = []
     for name, weight, value in items:  # O(n)
-        item = (value/weight, weight, name)   # O(1)
+        item = (value/weight, name, weight, value)   # O(1)
         elements.append(item)  # O(1)
 
     sort = sorted((elements), reverse = True) # TimSort (Melhor caso O(n); Pior caso O(n log n)) + O(n)
@@ -55,7 +51,7 @@ if __name__ == "__main__":
     if sys.argv[1] == "test":
         print("===> Modo teste para validar alogritmo")
         items = [
-             ("item1", 1.0, 2.0),
+            ("item1", 1.0, 2.0),
             ("item2", 1.0, 2.5),
             ("item3", 1.0, 3.0),
             ("item4", 1.0, 4.0),
@@ -75,4 +71,17 @@ if __name__ == "__main__":
     else:
         print("==> Não encontrei um padrão")
 
-    greedy(items, knapsack_weight)
+   
+    items_to_add =  greedy(items, knapsack_weight);
+    print("===> Capacidade da Mochila: {0}".format(knapsack_weight))
+    print("===> Itens que ficam no mochila:")
+    
+    peso = 0
+    valor = 0
+    for item in items_to_add:
+        print(item)
+        peso += item[2]
+        valor += item[3]
+
+    print("===> Peso da mochila: {0}".format(peso))
+    print("===> Valor da mochila: {0}".format(valor))

@@ -89,6 +89,12 @@ def median(L, j):
         Meds.append(median(subList, math.ceil((len(subList)+1)/2)))
     return median(Meds, math.ceil((len(Meds)+1)/2))
     
+def prepara_items(items):
+    items_tmp = []
+    for nome, peso, valor in items:
+        item_tmp = (valor/peso, nome, peso, valor)
+        items_tmp.append(item_tmp)
+    return items_tmp
 
 def generate_items(size):
     items = []
@@ -96,7 +102,7 @@ def generate_items(size):
         random_name = "item {0}".format(i)
         random_weight = random.uniform(1.0, 5.0)
         random_value = random.uniform(1.0, 5.0)
-        item = (random_value/random_weight, random_name, random_weight, random_value)
+        item = (random_name, random_weight, random_value)
         items.append(item)
     return items
 
@@ -110,12 +116,12 @@ if __name__ == "__main__":
         print("===> Modo teste para validar alogritmo")
         
         items = [
-            (2.0/1.0, "item1", 1.0, 2.0),
-            (2.5/1.0, "item2", 1.0, 2.5),
-            (3.0/1.0, "item3", 1.0, 3.0),
-            (4.0/1.0, "item4", 1.0, 4.0),
-            (1.0/1.0, "item5", 1.0, 1.0),
-            (5.0/1.0, "item6", 1.0, 5.0)
+            ("item1", 1.0, 2.0),
+            ("item2", 1.0, 2.5),
+            ("item3", 1.0, 3.0),
+            ("item4", 1.0, 4.0),
+            ("item5", 1.0, 1.0),
+            ("item6", 1.0, 5.0)
         ]
 
         knapsack_weight = 3.5
@@ -134,7 +140,7 @@ if __name__ == "__main__":
     else:
         print("==> Não encontrei um padrão")
 
-    items_to_add = weighted_median(items, knapsack_weight);
+    items_to_add = weighted_median(prepara_items(items), knapsack_weight);
     print("===> Capacidade da Mochila: {0}".format(knapsack_weight))
     print("===> Itens que ficam no mochila:")
     peso = 0
