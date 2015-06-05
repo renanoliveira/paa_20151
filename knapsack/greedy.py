@@ -1,27 +1,29 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
 
+
 import random
 import sys
 
-def greedy(sorted_items, k_weight):
+def greedy(items, k_weight):
+    sorted_items = order(items) #O(nlogn)
+
     total_weight = k_weight # O(1)
     total_value = 0 # O(1)
 
     for item_value, item_weight, item_name in sorted_items: # O(n)
         total_weight = total_weight - item_weight # O(1)
         if (total_weight) > 0.0: # O(1)
-            print("Adding => Item(Name: {0}, Weight: {1}, Value {2})".format(item_name, item_weight, (item_weight * item_value)))
+            #print("Adding => Item(Name: {0}, Weight: {1}, Value {2})".format(item_name, item_weight, (item_weight * item_value)))
             total_value += item_value # O(1)
         else:
             particial_weight = item_weight+total_weight # O(1)
             total_value += (particial_weight * item_value) # O(1)
 
-            print("Adding => Item(Name: {0}, Weight: {1}, Value {2})".format(item_name, particial_weight, (particial_weight * item_value)))
+            #print("Adding => Item(Name: {0}, Weight: {1}, Value {2})".format(item_name, particial_weight, (particial_weight * item_value)))
             break
 
-    print("Total Value = {0}".format(total_value))
-
+    #print("Total Value = {0}".format(total_value))
 
 
 def order(items):
@@ -61,8 +63,7 @@ if __name__ == "__main__":
             ("item6", 1.0, 5.0)
         ]
 
-        knapsack_weight = 3.5
-        sorted_items = order(items)
+        knapsack_weight = 3.5  
     elif len(sys.argv) == 3:
         knapsack_weight = float(sys.argv[1])
         item_size = int(sys.argv[2])
@@ -70,8 +71,8 @@ if __name__ == "__main__":
         print("===> Gerar mochila com valorizes randomicos - ")
         print("===> {0} de peso e {1} items".format(knapsack_weight, item_size))
 
-        sorted_items = order(generate_items(item_size))
+        items = generate_items(item_size)
     else:
         print("==> Não encontrei um padrão")
 
-    greedy(sorted_items, knapsack_weight)
+    greedy(items, knapsack_weight)
