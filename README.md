@@ -18,12 +18,20 @@ http://www-di.inf.puc-rio.br/~poggi//paa151-t1.pdf
 
 # Como executar:
 
-Para executar o problema 2.1
+Para executar os algoritmos
 
 - Modo Teste
 
 ```
-$ python knapsack_frac.py test
+$ python greedy.py test
+$ python weighted.py test
+$ python pivot.py test
+```
+
+- Modo medição de tempos de execução
+
+```
+$ python exec.py test
 ```
 
 Obs: Para executar versão com mediana das medianas, knapscak_frac_b.py test
