@@ -30,7 +30,7 @@ def dft(x):
     b = [0+0j] * n
     for m in range(n): #O(n)
         for k in range(n): #O(n)
-            b[m] += x[k]*omega(n, -k*m)
+            b[m] += x[k] * omega(n, -k * m)
     return b
 
 
