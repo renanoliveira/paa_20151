@@ -2,16 +2,6 @@ import cmath
 from numpy import real
 from cmath import exp, pi
 
-def roots_of_unity(period):
-    return [exp(-1j*2.*pi*j/period) for j in xrange(period)]
-
-def poly_eval(coefs, xs):
-    p = [0 for x in xs]
-    for k, x in enumerate(xs):
-        for j, c in enumerate(coefs):
-            p[k]+=(c*pow(x,j))
-    return p
-
 def omega(p, q):
    return exp((2.0 * pi * 1j * q) / p)
 
@@ -33,13 +23,25 @@ def fft(x):
 
       return bucket
 
-def dft(xs):
+def dft(x):
     print "dft"
-    n = len(xs)
-    return poly_eval(xs, roots_of_unity(n))
+    n = len(x)
 
-a = fft([1,2,3,4,5,6])
-b = fft([1,2,3,4])
+    b = [0+0j] * n
+    for m in range(n): #O(n)
+        for k in range(n): #O(n)
+            b[m] += x[k]*omega(n, -k*m)
+    return b
+
+
+# for f in dft([1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0]):
+#     print abs(f)
+#
+# for f in fft([1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0]):
+#     print abs(f)
+#
+a = fft([1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0])
+b = fft([1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0])
 
 C = []
 for a, b in zip(a, b):
