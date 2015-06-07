@@ -27,11 +27,11 @@ def dft(x):
     print "dft"
     n = len(x)
 
-    b = [0+0j] * n
+    bucket = [0] * n
     for m in range(n): #O(n)
         for k in range(n): #O(n)
-            b[m] += x[k] * omega(n, -k * m)
-    return b
+            bucket[m] += x[k] * omega(n, -k * m)
+    return bucket
 
 
 # for f in dft([1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0]):
