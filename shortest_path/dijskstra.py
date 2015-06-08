@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+#-*- coding:utf-8 -*-
+
 import sys
 import time
 
@@ -7,28 +10,28 @@ class Vertex:
     def __init__(self, node):
         self.id = node
         self.adjacent = {}
-        # Define dintancia infitinita para todos os nós
+        # Define dintancia infitinita para todos os nï¿½s
         self.distance = sys.maxsize #800 #sys.maxint
-        # Coloca não visitado para para todos os nós       
-        self.visited = False  
-        # Definie que todo o Predecessor é nulo
+        # Coloca nï¿½o visitado para para todos os nï¿½s
+        self.visited = False
+        # Definie que todo o Predecessor ï¿½ nulo
         self.previous = None
 
     def add_neighbor(self, neighbor, weight=0):
         self.adjacent[neighbor] = weight
 
-	# Pega os vértices adjacentes ao nó self
+	# Pega os vï¿½rtices adjacentes ao nï¿½ self
     def get_connections(self):
-        return self.adjacent.keys()  
+        return self.adjacent.keys()
 
     def get_id(self):
         return self.id
-		
-	# Pega a disntacia/custo da aresta entre o vértice self e o neighbor
+
+	# Pega a disntacia/custo da aresta entre o vï¿½rtice self e o neighbor
     def get_weight(self, neighbor):
         return self.adjacent[neighbor]
 
-	# Pega a disntacia atual (relaxada ou final) do vértice self
+	# Pega a disntacia atual (relaxada ou final) do vï¿½rtice self
     def set_distance(self, dist):
         self.distance = dist
 
@@ -49,7 +52,7 @@ class Graph:
     def __init__(self):
         self.vert_dict = {}
         self.num_vertices = 0
-	
+
     def __iter__(self):
         return iter(self.vert_dict.values())
 
@@ -110,9 +113,9 @@ def dijkstra(aGraph, start, target):
 #        heapq.heappush(unvisited_queue,(v,v.get_distance()))
     #heapq.heapify(unvisited_queue)
 
-    while len(unvisited_queue): #Este loop será feito uma vez para cada vértice do Grafo - O(n)
+    while len(unvisited_queue): #Este loop serï¿½ feito uma vez para cada vï¿½rtice do Grafo - O(n)
         # Pega o vertice com a menor distancia da priority queu
-		# Pops a vertex with the smallest distance 
+		# Pops a vertex with the smallest distance
         # O(n) - percorre o vetor unvisited_queue inteiro por lista - O(n) no pior caso
 
         #print("elementos na queue: %i" %len(unvisited_queue))
@@ -130,13 +133,13 @@ def dijkstra(aGraph, start, target):
         current = uv
         current.set_visited()
 
-        #Para todo vértice na lista de adjacencia do vertice atual: - 
-        for next in current.adjacent: # este for leva no máximo 
-            # Pula caso já tenha sido visitado
+        #Para todo vï¿½rtice na lista de adjacencia do vertice atual: -
+        for next in current.adjacent: # este for leva no mï¿½ximo
+            # Pula caso jï¿½ tenha sido visitado
             if next.visited:
                 continue
             new_dist = current.get_distance() + current.get_weight(next)
-            
+
             if new_dist < next.get_distance():
                 next.set_distance(new_dist)
                 next.set_previous(current)
@@ -156,10 +159,10 @@ def dijkstra(aGraph, start, target):
         # 2. Put all vertices not visited into the queue
         #unvisited_queue = [(v.get_distance(),v) for v in aGraph if not v.visited]
         #heapq.heapify(unvisited_queue)
-    
+
 if __name__ == '__main__':
 
-    time_inicial = time.time() 
+    time_inicial = time.time()
     timeout = time_inicial + 5   # 5 seconds from now
     test = 0
     while True:
@@ -196,7 +199,7 @@ if __name__ == '__main__':
         print("Edges: %d" %Edges)
         print("Nodes :%d" %Nodes)
 
-        dijkstra(g, g.get_vertex(1), g.get_vertex(Nodes)) 
+        dijkstra(g, g.get_vertex(1), g.get_vertex(Nodes))
 
         target = g.get_vertex(Nodes)
         #path = [target.get_id()]
@@ -205,5 +208,5 @@ if __name__ == '__main__':
         #print("Distancia total: %i" %target.get_distance())
     print("total de rodadas: %d" %test)
     tempo_medio = (time.time()-time_inicial)/test
-    #print("tempo médio: %.2f" %tempo_medio)
+    #print("tempo mï¿½dio: %.2f" %tempo_medio)
     print("tempo medio: %.2f" %tempo_medio)
