@@ -15,11 +15,11 @@ def weighted_median(items, W):
 
     #Se |items| == 1 e capacidade da < items[0].peso 
     if len(items) == 1 and items[0][2] > W:
-        L = []
-        print("===> Peso fracionario: {0}".format(peso_fracionario))
+        tmp = []
+        #print("===> Peso fracionario: {0}".format(peso_fracionario))
         peso_fracionario = W
         item_fracionario = (items[0][0], items[0][1], peso_fracionario, items[0][0]*peso_fracionario)
-        L.append(item_fracionario)
+        tmp.append(item_fracionario)
         return L
 
     elements_mediana = median(items, math.ceil((len(items)+1)/2))
@@ -38,8 +38,8 @@ def weighted_median(items, W):
             L3.append(item)
 
 
-    print("===> Capacidade da Mochila")
-    print(W)
+    #print("===> Capacidade da Mochila")
+    #print(W)
     #print("===> Elementos maiores que a mediada:")
     #print(L1)
     #print("===> Elementos iguais a mediada:")
@@ -48,23 +48,19 @@ def weighted_median(items, W):
     #print(L3)
 
     sum_L1 = sum(item[2] for item in L1)
-    print("Soma de pesos de L1: {0}".format(sum_L1))
+    #print("Soma de pesos de L1: {0}".format(sum_L1))
     sum_L2 = sum(item[2] for item in L2)
-    print("Soma de pesos de L2: {0}".format(sum_L2))
+    #print("Soma de pesos de L2: {0}".format(sum_L2))
     sum_L3 = sum(item[2] for item in L3)
-    print("Soma de pesos de L3: {0}".format(sum_L3))
+    #print("Soma de pesos de L3: {0}".format(sum_L3))
    
     if sum_L1 < W and sum_L1 + sum_L2 >= W:
-        print("===> Adiciona frações")
+        #print("===> Adiciona frações")
         for item in L2:
-            print(item)
-            print(sum_L1)
-            print(W)
             if sum_L1 == W:
                 break
             elif sum_L1 + item[2] > W:
                 peso_fracionario = W - sum_L1
-                print("===> Peso fracionario: {0}".format(peso_fracionario))
                 item_fracionario = (item[0], item[1], peso_fracionario, item[0]*peso_fracionario)
                 L1.append(item_fracionario)
                 break
@@ -85,6 +81,7 @@ def median(L, j):
     if len(L) <= 5:
         #Ordena do maior para o menor lista de no máximo 5 elementos
         #Retorna elemento na posição j - 1
+        print(L)
         L.sort(key = lambda L : L[0], reverse = True)
         return L[j - 1]
 
