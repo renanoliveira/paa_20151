@@ -1,40 +1,89 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
 
-from math import floor, log10
+import math
 
-def m_power(num1,num2):
+def eh_impar(num):
+	return num & 0x1
 
-    digits_of_num1 = number_of_digits(num1)
-    digits_of_num2 = number_of_digits(num2)
+def karatsuba(A, B):
 
-    return min(digits_of_num1,digits_of_num2) / 2
+	degree = len(A) - 1
+	if(eh_impar(degree)):
+		N = degree +1
+	else:
+		N = degree
 
-def split_at(number,m_power):
+	if(degree == 0):
+		print("returning for N = 1: {0}*{1}".format(A[0], B[0]))
+		return [A[0]*B[0]]
 
-    left_part = int(floor(number / (10 ** m_power)))
-    right_part = int(number % (10 ** m_power))
+	split_at = math.ceil((degree+1)/2)
+	print("spliting at: {0}".format(split_at))
+	Al = A[0:split_at]
+	print("Al:")
+	print(Al)
+	Au = A[(split_at):(len(A))]
+	print("Au:")
+	print(Au)
+	Bl = B[0:split_at]
+	print("Bl:")
+	print(Bl)
+	Bu = B[(split_at):(len(A))]
+	print("Bu:")
+	print(Bu)
 
-    return (left_part,right_part)
+	#Ajusta tamanho das partes do polinômio para permitir soma de coeficiêntes
+	if(len(Al) != len(Au)):
+		Au.insert(0, 0)
+		print("Ajusta Au:")
+		print(Au)
+	if(len(Bl) != len(Bu)):
+		Bu.insert(0, 0)
+		print("Ajusta Bu:")
+		print(Bu)
 
-def number_of_digits(number):
-    return int(log10(number) + 1)
+	sum_Al_Au = [x + y for x, y in zip(Al, Au)]
+	print("Sum Al + Au")
+	print(sum_Al_Au) 
+	sum_Bl_Bu = [x + y for x, y in zip(Bl, Bu)]
+	print("Sum Bl + Bu")
+	print(sum_Bl_Bu)
 
+	z0 = karatsuba(Al,Bl)
+	print(z0)
+	z1 = karatsuba(Au,Bu)
+	print(z1)
+	z2 = karatsuba(sum_Al_Au, sum_Bl_Bu)
+	print(z2)
+	sub_z2_z1 = [x - y for x, y in zip(z2, z1)]	
+	z01 = [x - y for x, y in zip(sub_z2_z1, z0)]
+	print(z01)
 
-def karatsuba(num1, num2):
+	#Ajusta polinômios resultantes para soma
+	print(N)
+	for x in range (0, N):
+		z1.insert(0, 0)
+		z0.append(0)
 
-	if (num1 / 10 == 0) or (num2 / 10 == 0):
-		return num1 * num2
+	for x in range (0, int(N/2)):
+		z01.insert(0,0)
+		z01.append(0)
 
-	m2 = m_power(num1,num2)
+	
+	print(z2)
+	print(z1)
+	print(z0)
 
-	high1, low1 = split_at(num1, m2)
-	high2, low2 = split_at(num2, m2)
+	print(z01)
+	print(z0)	
 
-	z0 = karatsuba(low1,low2)
-	z1 = karatsuba((low1+high1),(low2+high2))
-	z2 = karatsuba(high1,high2)
+	return [x + y + z for x, y, z in zip(z1, z01, z0)]	
 
-	return (z2 * 10 ** (2 * m2)) + ((z1-z2-z0) * 10 ** (m2)) + (z0)
-
-print karatsuba(1002,1013)
+#print(karatsuba([1, 4],[2, 6])) #[2, 14, 24]
+#print(karatsuba([1, 2, 3],[1, 6, 2])) #[1, 8, 17, 22, 6]
+#print(karatsuba([1, 1, 3, 2],[1, 2, 5, 1])) #[1, 3, 10, 14, 20, 13, 6]
+#print(karatsuba([1, 1, 3, 1, 2],[1, 5, 2, 3, 1])) #[1, 6, 10, 21, 17, 22, 10, 7, 2]
+#print(karatsuba([0, 0, 15, 0, 2, 0],[0, 0, 0, -1, 0, 5])) #[0, 0, 0, 0, 0, 15, 0, 73, 0, 10]
+#print(karatsuba([0, -44, 0, 2], [0, 1, -50, -1])) #[0, 0, -44, 2200, 46, -100, -2]
+print(karatsuba([0, 0, 0, -1, 0, 5],[0, 0, -1, 0, 1, 0])) #[0, 0, 0, 0, 0, 1, 0, -6, 0, 5, 0]
