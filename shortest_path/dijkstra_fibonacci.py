@@ -1,5 +1,6 @@
 import sys
 import time
+import fibonacci_heap_mod
 
 
 class Vertex:
@@ -8,11 +9,19 @@ class Vertex:
         self.id = node
         self.adjacent = {}
         # Define dintancia infitinita para todos os nós
-        self.distance = sys.maxsize #800 #sys.maxint
+        self.distance = sys.maxsize
         # Coloca não visitado para para todos os nós       
         self.visited = False  
         # Definie que todo o Predecessor é nulo
         self.previous = None
+        # Define em qual entrada está na Fibonacci_hep_mod
+        self.heap = None
+
+    def set_heap(self, heap):
+        self.heap = heap
+
+    def get_heap(self):
+        return self.heap
 
     def add_neighbor(self, neighbor, weight=0):
         self.adjacent[neighbor] = weight
@@ -40,6 +49,9 @@ class Vertex:
 
     def set_visited(self):
         self.visited = True
+
+    def get_visited(self):
+        return self.visited
 
     def __str__(self):
         return str(self.id) + ' adjacent: ' + str([x.id for x in self.adjacent])
@@ -91,25 +103,18 @@ def shortest(v, path):
         shortest(v.previous, path)
     return
 
-
-def dijkstra(aGraph, start, target):
+def dijkstra(aGraph, start):
     print("Dijkstra's shortest path")
     # Define como zero a distancia para o ponto inicial
     start.set_distance(0)
 
+
     # Inicializa a pripority queu
-    unvisited_queue = []
-    #unvisited_queue.array([(v.get_distance(),v) for v in aGraph])
-    #for v in aGraph: #O(v)
-    unvisited_queue = [v for v in aGraph]
-    #unvisite_queue = [(v.get_distance(),v) for v in aGraph]
+    unvisited_queue = fibonacci_heap_mod.Fibonacci_heap()
+    for v in aGraph:
+        v.set_heap(unvisited_queue.enqueue(v,v.get_distance()))
 
-#    unvisited_queue = []
-#    for v in aGraph:
-#        heapq.heappush(unvisited_queue,(v,v.get_distance()))
-    #heapq.heapify(unvisited_queue)
-
-    while len(unvisited_queue): #Este loop será feito uma vez para cada vértice do Grafo - O(n)
+    while unvisited_queue.m_size != 0: #Este loop será feito uma vez para cada vértice do Grafo - O(n)
         # Pega o vertice com a menor distancia da priority queu
 		# Pops a vertex with the smallest distance 
         # O(n) - percorre o vetor unvisited_queue inteiro por lista - O(n) no pior caso
@@ -118,17 +123,16 @@ def dijkstra(aGraph, start, target):
         #uv = heapq.heappop(unvisited_queue)
         distancia_minima = sys.maxsize
         uv = []
-        for element in unvisited_queue:
-            distancia_atual = element.get_distance()
-            if distancia_atual  < distancia_minima:
-                distancia_minima = distancia_atual
-                uv = element
+        node = []
+        node = unvisited_queue.dequeue_min()
+        uv = node.m_elem
 
-        if uv == []:
+        if uv == None:
             break
         current = uv
         current.set_visited()
 
+        modify = False
         #Para todo vértice na lista de adjacencia do vertice atual: - 
         for next in current.adjacent: # este for leva no máximo 
             # Pula caso já tenha sido visitado
@@ -136,21 +140,19 @@ def dijkstra(aGraph, start, target):
                 continue
             new_dist = current.get_distance() + current.get_weight(next)
             
-            if new_dist < next.get_distance():
+            if new_dist < next.get_distance(): 
+                unvisited_queue.decrease_key(next.get_heap(),new_dist)    
                 next.set_distance(new_dist)
                 next.set_previous(current)
+                modify = True
+  
+
                 #print("updated : current = %s next = %s new_dist = %s"
                 #        %(current.get_id(), next.get_id(), next.get_distance()))
             #else:
                 #print("not updated : current = %s next = %s new_dist = %s"
                 #        %(current.get_id(), next.get_id(), next.get_distance()))
 
-        # Refaz a heap
-       # while len(unvisited_queue):
-           # heapq.heappop(unvisited_queue)
-        index = unvisited_queue.index(uv)
-        unvisited_queue.pop(index)
-        #print(len(unvisited_queue))
 
         # 2. Put all vertices not visited into the queue
         #unvisited_queue = [(v.get_distance(),v) for v in aGraph if not v.visited]
@@ -169,20 +171,19 @@ if __name__ == '__main__':
 
         g = Graph()
 
-        f = open('C:\\Users\\TA\\Desktop\\DMXA\\DMXA\\dmxa0903.stp','r+')
+        f = open('C:\\Users\\TA\\Desktop\\DMXA\\DMXA\\dmxa1801.stp','r+')
         #print(f.read())
         f_words = f.read()
         f_words = f_words.split()
         f.close()
         Nodes = int(f_words[26])
         Edges = int(f_words[28])
-        contador = 0
 
         for v in range(1,Nodes+1) :
             g.add_vertex(v)
 
-        for contador in range (0, Edges):
-            g.add_edge(int(f_words[30 + 4*contador]),int(f_words[31 + 4*contador]),int(f_words[32 + 4*contador]))
+        for index in range(0, Edges):
+            g.add_edge(int(f_words[30 + 4*index]),int(f_words[31 + 4*index]),int(f_words[32 + 4*index]))
 
         #print("Graph data:")
         #for v in g:
@@ -195,13 +196,15 @@ if __name__ == '__main__':
         print("Edges: %d" %Edges)
         print("Nodes :%d" %Nodes)
 
-        dijkstra(g, g.get_vertex(1), g.get_vertex(Nodes)) 
+        dijkstra(g, g.get_vertex(1)) 
 
+        # Retorna menor caminho entre source (g.get_vertex(1)) e target
         target = g.get_vertex(Nodes)
-        #path = [target.get_id()]
-        #shortest(target, path)
-        #print("The shortest path : %s" %(path[::-1]))
-        #print("Distancia total: %i" %target.get_distance())
+        path = [target.get_id()]
+        shortest(target, path)
+        print("The shortest path : %s" %(path[::-1]))
+        print("Distancia total: %i" %target.get_distance())
+
     print("total de rodadas: %d" %test)
     tempo_medio = (time.time()-time_inicial)/test
     #print("tempo médio: %.2f" %tempo_medio)

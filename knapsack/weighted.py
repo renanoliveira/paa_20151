@@ -8,17 +8,22 @@ import math
 
 # O(n)
 def weighted_median(items, W):
-    
+
+    #Se |items| == 0, não há items para adicionar a mochila
+    if(len(items) == 0):
+        return []
+
     #Se |items| == 1 e capacidade da < items[0].peso 
     if len(items) == 1 and items[0][2] > W:
         L = []
+        print("===> Peso fracionario: {0}".format(peso_fracionario))
         peso_fracionario = W
         item_fracionario = (items[0][0], items[0][1], peso_fracionario, items[0][0]*peso_fracionario)
         L.append(item_fracionario)
         return L
 
     elements_mediana = median(items, math.ceil((len(items)+1)/2))
-    print("===> Mediana das Medianas: {0}".format(elements_mediana))
+    #print("===> Mediana das Medianas: {0}".format(elements_mediana))
     
     L1 = [] # Itens com valor/peso < que a mediana
     L2 = [] # Itens com valor/peso = que a mediana
@@ -32,12 +37,15 @@ def weighted_median(items, W):
         else:
             L3.append(item)
 
-    print("===> Elementos maiores que a mediada:")
-    print(L1)
-    print("===> Elementos iguais a mediada:")
-    print(L2)
-    print("===> Elementos menores que a mediana:")
-    print(L3)
+
+    print("===> Capacidade da Mochila")
+    print(W)
+    #print("===> Elementos maiores que a mediada:")
+    #print(L1)
+    #print("===> Elementos iguais a mediada:")
+    #print(L2)
+    #print("===> Elementos menores que a mediana:")
+    #print(L3)
 
     sum_L1 = sum(item[2] for item in L1)
     print("Soma de pesos de L1: {0}".format(sum_L1))
@@ -49,22 +57,27 @@ def weighted_median(items, W):
     if sum_L1 < W and sum_L1 + sum_L2 >= W:
         print("===> Adiciona frações")
         for item in L2:
+            print(item)
+            print(sum_L1)
+            print(W)
             if sum_L1 == W:
                 break
             elif sum_L1 + item[2] > W:
                 peso_fracionario = W - sum_L1
+                print("===> Peso fracionario: {0}".format(peso_fracionario))
                 item_fracionario = (item[0], item[1], peso_fracionario, item[0]*peso_fracionario)
                 L1.append(item_fracionario)
                 break
             else:
                 L1.append(item)
+                W = W - item[2]
         return L1
     if sum_L1 + sum_L2 < W:
         return L1 + L2 + (weighted_median(L3, W - (sum_L1 + sum_L2)))
     if sum_L1 > W:
         return weighted_median(L1, W)  
 
-    return "===> Seu algorítmo está mal projetado" 
+    #print("===> Seu algorítmo está mal projetado")
     
 
 def median(L, j):

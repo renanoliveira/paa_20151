@@ -6,18 +6,24 @@ import random
 import sys
 
 def greedy(items, k_weight):
+    #print(items)
     sorted_items = order(items) #O(nlogn)
+    #print(sorted_items)
     items_knapsack = []
     total_weight = k_weight # O(1)
 
     for item in sorted_items: # O(n)
         total_weight = total_weight - item[2] # O(1)
+        #print(total_weight)
         if (total_weight) > 0.0: # O(1)
             items_knapsack.append(item)
         else:
+            #print("Appending partial_weight")
             partial_weight = item[2]+total_weight # O(1)
-            partial_item = (item[1], partial_weight, (item[3]/item[2])*partial_weight)
-            items_knapsack.append(item)
+            #print(partial_weight)
+            partial_item = ((item[3]/item[2]), item[1], partial_weight, (item[3]/item[2])*partial_weight)
+            #print(partial_item)
+            items_knapsack.append(partial_item)
             break
 
     return items_knapsack
@@ -79,9 +85,10 @@ if __name__ == "__main__":
     peso = 0
     valor = 0
     for item in items_to_add:
-        print(item)
         peso += item[2]
         valor += item[3]
+        print(item)
+        print(peso)
 
     print("===> Peso da mochila: {0}".format(peso))
     print("===> Valor da mochila: {0}".format(valor))

@@ -9,6 +9,10 @@ import math
 # O(n2)
 def weighted_pivot(items, W):
 
+    #Se |items| == 0, não há items para adicionar a mochila
+    if(len(items) == 0):
+        return []
+
     #Se |items| == 1 e capacidade da < items[0].peso 
     if len(items) == 1 and items[0][2] > W:
         L = []
@@ -18,7 +22,7 @@ def weighted_pivot(items, W):
         return L
 
     elements_pivot = pivot(items)
-    print("===> Pivo: {0}".format(elements_pivot))
+    #print("===> Pivo: {0}".format(elements_pivot))
     
     L1 = [] # Itens com valor/peso < que o pivot
     L2 = [] # Itens com valor/peso = que o pivot
@@ -31,23 +35,28 @@ def weighted_pivot(items, W):
             L2.append(item)
         else:
             L3.append(item)
+    #print("===> Pivot: {0}".format(elements_pivot))
+    #print("===> Capacidade da Mochila: {0}".format(W))
 
-    print("===> Elementos maiores que o pivot:")
-    print(L1)
-    print("===> Elementos iguais o pivot:")
-    print(L2)
-    print("===> Elementos menores que o pivot:")
-    print(L3)
+    #print("===> Elementos maiores que o pivot:")
+    #print(L1)
+    #print("===> Elementos iguais o pivot:")
+    #print(L2)
+    #print("===> Elementos menores que o pivot:")
+    #print(L3)
 
     sum_L1 = sum(item[2] for item in L1)
-    print("Soma de pesos de L1: {0}".format(sum_L1))
+    #print("Soma de pesos de L1: {0}".format(sum_L1))
     sum_L2 = sum(item[2] for item in L2)
-    print("Soma de pesos de L2: {0}".format(sum_L2))
+    #print("Soma de pesos de L2: {0}".format(sum_L2))
     sum_L3 = sum(item[2] for item in L3)
-    print("Soma de pesos de L3: {0}".format(sum_L3))
+    #print("Soma de pesos de L3: {0}".format(sum_L3))
    
+    if sum_L1 + sum_L2 + sum_L3 < W:
+        return L1 + L2 + L3
+        
     if sum_L1 < W and sum_L1 + sum_L2 >= W:
-        print("===> Adiciona frações")
+        #print("===> Adiciona frações")
         for item in L2:
             if sum_L1 == W:
                 break
@@ -58,13 +67,15 @@ def weighted_pivot(items, W):
                 break
             else:
                 L1.append(item)
+                W = W - item[2]
         return L1
+    
     if sum_L1 + sum_L2 < W:
         return L1 + L2 + (weighted_pivot(L3, W - (sum_L1 + sum_L2)))
     if sum_L1 > W:
         return weighted_pivot(L1, W)  
 
-    return "===> Seu algorítmo está mal projetado" 
+    print("===> Seu algorítmo está mal projetado")
     
 
 def pivot(L):
