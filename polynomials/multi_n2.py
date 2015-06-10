@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
 
-import random
-
 def multiply_polynomials_in_n2(poly1, poly2):
     polynomials_size = len(poly1)+len(poly2)
     buckets = [0]*(polynomials_size-1)
