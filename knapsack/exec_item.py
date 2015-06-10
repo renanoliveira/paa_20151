@@ -44,9 +44,6 @@ if __name__ == "__main__":
 	for item in items_to_add:
 		peso += item[2]
 		valor += item[3]
-		print(item)
-		print(peso)
-
 
 	print("===> Peso: {0}".format(peso))
 	print("===> Valor: {0}".format(valor))
