@@ -1,6 +1,4 @@
 import cmath
-from numpy import real
-import numpy as np
 from cmath import exp, pi
 
 def omega(p, q):
