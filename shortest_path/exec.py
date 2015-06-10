@@ -1,65 +1,48 @@
 import os
 import csv
 import time
-import greedy
-import weighted
-import pivot
+import dijkstra
 
 
 if __name__ == "__main__":
 	# Importar dados de instancias
-	files = os.listdir("instancias")
+	files = os.listdir("instancias/array")
 
 	with open('array.csv', 'w') as csvfile:
-		fieldnames = ['V', 'E', 'tempo_execucao']
+		fieldnames = ['instancia', 'nodes', 'edges', 'tempo_execucao']
 		writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 		writer.writeheader()
 		for filename in files:
-			num_linha = 1
-			qtd_items_instancia = 0
-			items_instancia = []
-			capacidade_mochila = 0
-			peso_total_items = 0
-			f = open("instancias/array" + filename,'r')
-			for linha in f.readlines():
-				if num_linha == 1:
-					qtd_items_instancia = int(linha.strip())
-				elif num_linha < qtd_items_instancia + 2:
-					item_data = linha.split()
-					nome = item_data[0]
-					peso = int(item_data[2].strip())
-					valor = int(item_data[1].strip())
-					item = (nome, peso, valor)
-					items_instancia.append(item)
-				else:
-					capacidade_mochila = int(linha.strip())	
-				num_linha = num_linha + 1
+			g = dijkstra.Graph()
 
-			print("===>Tamanho da Instância: {0}".format(qtd_items_instancia))
-			#print("===>Capacidade da mochila: {0}".format(capacidade_mochila))
+			f = open("instancias/array/" + filename,'r')
+			f_words = f.read()
+			f_words = f_words.split()
+			f.close()
 
-			peso_total_items = sum(item[1] for item in items_instancia)
+			Nodes = int(f_words[26])
+			Edges = int(f_words[28])
+			contador = 0
 
-			#print("===>Usando algorítmo com pivot")
-			counter = 1
-			elapsed_time = 0
-			t = time.process_time()
-			while elapsed_time < 5:
-				items_to_add = pivot.weighted_pivot(pivot.prepara_items(items_instancia), capacidade_mochila)
-				elapsed_time = time.process_time() - t
-				counter = counter + 1
-			
-			peso = 0
-			valor = 0
-			for item in items_to_add:
-				peso += item[2]
-				valor += item[3]
+			for v in range(1,Nodes+1) :
+				g.add_vertex(v)
 
-			writer.writerow({'instancia': qtd_items_instancia, 'tempo_execucao': round(elapsed_time/counter, 10), 'valor_mochila': valor, 'peso_mochila': peso, 'capacidade_mochila': capacidade_mochila, 'peso_total': peso_total_items})
+			for contador in range (0, Edges):
+				g.add_edge(int(f_words[30 + 4*contador]),int(f_words[31 + 4*contador]),int(f_words[32 + 4*contador]))
 
-		print("===> Tempo inicial: {0}".format(t))
-		print("===> Tempo de execução: {0}".format(elapsed_time))
+			time_inicial = time.time() 
+			timeout = time_inicial + 5   # 5 seconds from now
+			execucoes = 0
+			while True:
+				if time.time() > timeout:
+					break
+				execucoes = execucoes + 1
+				dijkstra.dijkstra(g, g.get_vertex(1), g.get_vertex(Nodes)) 
+			tempo_medio = (time.time()-time_inicial)/execucoes
+			writer.writerow({'instancia': filename, 'nodes': Nodes, 'edges': Edges, 'tempo_execucao': tempo_medio})
 		f.close()	
+
+		
 
 
 

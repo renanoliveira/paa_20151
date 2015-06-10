@@ -104,7 +104,7 @@ def shortest(v, path):
     return
 
 def dijkstra(aGraph, start):
-    print("Dijkstra's shortest path")
+    #print("Dijkstra's shortest path")
     # Define como zero a distancia para o ponto inicial
     start.set_distance(0)
 
