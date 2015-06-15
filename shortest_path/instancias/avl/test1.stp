@@ -1,0 +1,13 @@
+Section Graph
+Nodes 6
+Edges 9
+E 1 2 3
+E 1 4 1
+E 1 6 2
+E 2 3 7
+E 2 6 5
+E 3 6 3
+E 4 3 9
+E 4 5 10
+E 5 6 1
+End

@@ -9,28 +9,28 @@ class Vertex:
     def __init__(self, node):
         self.id = node
         self.adjacent = {}
-        # Define dintancia infitinita para todos os nÛs
+        # Define dintancia infitinita para todos os n√≥s
         self.distance = sys.maxsize
-        # Coloca n„o visitado para para todos os nÛs       
+        # Coloca n√£o visitado para para todos os n√≥s       
         self.visited = False  
-        # Definie que todo o Predecessor È nulo
+        # Definie que todo o Predecessor √© nulo
         self.previous = None
 
     def add_neighbor(self, neighbor, weight=0):
         self.adjacent[neighbor] = weight
 
-	# Pega os vÈrtices adjacentes ao nÛ self
+	# Pega os v√©rtices adjacentes ao n√≥ self
     def get_connections(self):
         return self.adjacent.keys()  
 
     def get_id(self):
         return self.id
 		
-	# Pega a disntacia/custo da aresta entre o vÈrtice self e o neighbor
+	# Pega a disntacia/custo da aresta entre o v√©rtice self e o neighbor
     def get_weight(self, neighbor):
         return self.adjacent[neighbor]
 
-	# Pega a disntacia atual (relaxada ou final) do vÈrtice self
+	# Pega a disntacia atual (relaxada ou final) do v√©rtice self
     def set_distance(self, dist):
         self.distance = dist
 
@@ -107,7 +107,7 @@ def dijkstra(aGraph, start):
     for v in aGraph:
         unvisited_queue.insert([v.get_distance(),v.get_id(),v])
 
-    while unvisited_queue.root.height != 0: #Este loop ser· feito uma vez para cada vÈrtice do Grafo - O(n)
+    while unvisited_queue.root.height != 0: #Este loop ser√° feito uma vez para cada v√©rtice do Grafo - O(n)
         # Pega o vertice com a menor distancia da priority queu
 		# Pops a vertex with the smallest distance 
         # O(n) - percorre o vetor unvisited_queue inteiro por lista - O(n) no pior caso
@@ -126,9 +126,9 @@ def dijkstra(aGraph, start):
         current.set_visited()
 
         modify = False
-        #Para todo vÈrtice na lista de adjacencia do vertice atual: - 
-        for next in current.adjacent: # este for leva no m·ximo 
-            # Pula caso j· tenha sido visitado
+        #Para todo v√©rtice na lista de adjacencia do vertice atual: - 
+        for next in current.adjacent: # este for leva no m√°ximo 
+            # Pula caso j√° tenha sido visitado
             if next.visited:
                 continue
             new_dist = current.get_distance() + current.get_weight(next)
@@ -142,6 +142,8 @@ def dijkstra(aGraph, start):
         for v in aGraph:
             if v.get_visited() == False:
                 unvisited_queue.insert([v.get_distance(),v.get_id(),v])
+
+        print(unvisited_queue)
 
                 #print("updated : current = %s next = %s new_dist = %s"
                 #        %(current.get_id(), next.get_id(), next.get_distance()))
@@ -167,7 +169,7 @@ if __name__ == '__main__':
 
         g = Graph()
 
-        f = open('C:\\Users\\TA\\Desktop\\DMXA\\DMXA\\dmxa1801.stp','r+')
+        f = open('instancias/array/dmxa0903.stp','r+')
         #print(f.read())
         f_words = f.read()
         f_words = f_words.split()
@@ -203,5 +205,5 @@ if __name__ == '__main__':
 
     print("total de rodadas: %d" %test)
     tempo_medio = (time.time()-time_inicial)/test
-    #print("tempo mÈdio: %.2f" %tempo_medio)
+    #print("tempo m√©dio: %.2f" %tempo_medio)
     print("tempo medio: %.2f" %tempo_medio)
