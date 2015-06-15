@@ -69,7 +69,7 @@ and a pointer to the root.
         if self.root is None: return '<empty tree>'
         def recurse(node):
             if node is None: return [], 0, 0
-            label = str(node.key)
+            label = str(node.key) + ' ' + str(node.label)
             left_lines, left_pos, left_width = recurse(node.left)
             right_lines, right_pos, right_width = recurse(node.right)
             middle = max(right_pos + left_width - left_pos + 1, len(label), 2)

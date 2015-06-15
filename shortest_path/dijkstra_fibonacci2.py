@@ -1,7 +1,7 @@
 import sys
 import time
 import networkx as nx
-import avl as avl
+import fibonacci_heap_mod as fb
 
 
 
@@ -11,42 +11,31 @@ def dijkstra(G, s):
     for node in G.nodes():
         G.node[node]['d'] = sys.maxsize
         G.node[node]['py'] = None
+        G.node[node]['visited'] = False
+        G.node[node]['heap_entry'] = False
+
 
     G.node[s]['d'] = 0
     
     S = [] #Guarda o caminho mais curto
 
-    Q = avl.AVL()
+    Q = fb.Fibonacci_heap()
     for node in G.nodes():
-        Q.insert([G.node[node]['d'], node, node])
+        G.node[node]['heap_entry'] = Q.enqueue(node,G.node[node]['d'])
 
-    while Q.root.height != 0:
-        tree_node = Q.delete_min()
-        u = tree_node.label
-        S.append(u)
-        print(u)
+    while Q.m_size != 0:
+        fb_entry = Q.dequeue_min()
+        u = fb_entry.m_elem
+        G.node[u]['visited'] = True
 
         for v in G.neighbors(u):
             if G.node[v]['d'] > G.node[u]['d'] + G.edge[u][v]['weight']:
-                print("==> Updating {0}".format(v))
-                print("==> Distancia antiva {0}".format(G.node[v]['d']))
-                print("==> Nova distância {0}".format( G.node[u]['d'] + G.edge[u][v]['weight']))
-                print("===> Root {0}".format(Q.root.label))
-                node = Q.find([G.node[v]['d'], v])
-                #Atualiza distância do vertíce
-                G.node[v]['d'] = G.node[u]['d'] + G.edge[u][v]['weight']
-                print("==>Antes da remoção")
-                print(Q)
-                #Remove vertice desatualizado da árvore e insere novamente com valor atualizado
-                if not node == None:
-                    Q.remove(node)
-                    Q.insert([G.node[v]['d'], v, v])
-                print("==>Depois da remoção")
-                print(Q)
-
-
+                new_distance = G.node[u]['d'] + G.edge[u][v]['weight']
+                if(not G.node[v]['visited']):
+                    Q.decrease_key(G.node[v]['heap_entry'], new_distance)
+                G.node[v]['d'] = new_distance
                 G.node[v]['py'] = u
-    return S
+
     
 if __name__ == '__main__':
 

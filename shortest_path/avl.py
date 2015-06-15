@@ -74,10 +74,124 @@ Supports insert, find, and delete-min operations in O(lg n) time.
                     self.left_rotate(node)
             node = node.parent
 
+    def find_smallest(self, start_node):
+        node = start_node
+        while node.left:
+            node = node.left
+        return node
+
     def delete_min(self):
         node, parent = bst.BST.delete_min(self)
         self.rebalance(parent)
         return node
+
+    def remove(self, node):
+
+        if not node is None:
+            #Node is a leaf
+            if node.right == None and node.left == None:
+                self.remove_leaf(node)
+            elif (bool(node.right) ^ bool(node.left)):
+                self.remove_branch(node)
+            else:
+                self.swap_with_sucessor_and_remove(node)
+
+    def remove_leaf(self, node):
+        parent = node.parent
+        if(parent):
+            if(not parent.left == None and parent.left.key == node.key and parent.left.label == node.label):
+                parent.left = None
+            else:
+                parent.right = None
+            parent.height = max(height(parent.left), height(parent.right)) + 1 
+        else:
+            self.root = None
+        node.disconnect()
+
+        node = parent
+        while(node):
+            balance = (node.left.height if node.left else -1) - (node.right.height if node.right else -1)
+            if not balance in [-1, 0, 1]:
+                self.rebalance(node)
+            node = node.parent
+
+    def remove_branch(self, node):
+        parent = node.parent
+        if (parent):
+            if parent.left.key == node.key and parent.left.label == node.label:
+                parent.left = node.right or node.left
+            else:
+                parent.right = node.right or node.left
+            if node.left:
+                node.left.parent = parent
+            else:
+                node.right.parent = parent 
+            parent.height = max(height(parent.left), height(parent.right)) + 1 
+        node.disconnect()
+        # rebalance
+        node = parent
+        while(node):
+            balance = (node.left.height if node.left else -1) - (node.right.height if node.right else -1)
+            if not balance in [-1, 0, 1]:
+                self.rebalance(node)
+            node = node.parent
+
+    def swap_with_sucessor_and_remove (self, node):
+        successor = self.find_smallest(node.right)
+        self.swap_nodes (node, successor)
+        print("===> 'Tree after swaping")
+        print(self)
+        if node.height == 0:
+            self.remove_leaf(node)
+        else:
+            self.remove_branch(node)
+            
+    def swap_nodes (self, node1, node2):
+        print("===> Swapping nodes {0} e {1}".format(node1.label, node2.label))
+        parent1 = node1.parent #None for root
+        left1 = node1.left #10.2
+        right1 = node1.right #10.5
+        parent2 = node2.parent #10.4
+        left2 = node2.left #None
+        right2 = node2.right #10.6
+        print("===> Step 1")
+        print(self)
+        
+        # swap heights
+        tmp = node1.height #2
+        node1.height = node2.height #1
+        node2.height = tmp #2
+       
+        if not parent1 == None:
+            if not parent1 == None and parent1.left.key == node1.key and parent1.left.label == node1.left.label:
+                parent1.left = node2
+            else:
+                parent1.right = node2
+            node2.parent = parent1
+        else:
+            self.rootNode = node2
+            node2.parent = None
+        
+        print("===> Step 2")
+        print(self)
+
+        node2.left = left1
+        left1.parent = node2
+        node1.left = left2 # None
+        node1.right = right2
+        if not right2 == None:
+            right2.parent = node1 
+        if not (parent2.key == node1.key and parent2.label == node1.label):
+            node2.right = right1
+            right1.parent = node2
+            
+            parent2.left = node1
+            node1.parent = parent2
+        else:
+            node2.right = node1
+            node1.parent = node2  
+        print("===> Step 3")
+        print(self) 
 
     def find(self,t):
         t_key = t[0]
