@@ -19,7 +19,7 @@ def weighted_median(items, W):
         peso_fracionario = W
         item_fracionario = (items[0][0], items[0][1], peso_fracionario, items[0][0]*peso_fracionario)
         tmp.append(item_fracionario)
-        return L
+        return tmp
     
     median = select (items, math.ceil(len(items)/2) - 1)
 
@@ -52,11 +52,11 @@ def weighted_median(items, W):
 
     sum_L1 = sum(item[2] for item in L1)
     #print("Soma de pesos de L1: {0}".format(sum_L1))
+    if sum_L1 > W:
+        return weighted_median(L1, W)
+
     sum_L2 = sum(item[2] for item in L2)
     #print("Soma de pesos de L2: {0}".format(sum_L2))
-    sum_L3 = sum(item[2] for item in L3)
-    #print("Soma de pesos de L3: {0}".format(sum_L3))
-   
     if sum_L1 < W and sum_L1 + sum_L2 >= W:
         #print("===> Adiciona frações")
         for item in L2:
@@ -71,18 +71,57 @@ def weighted_median(items, W):
                 L1.append(item)
                 W = W - item[2]
         return L1
+
+    sum_L3 = sum(item[2] for item in L3)
+    #print("Soma de pesos de L3: {0}".format(sum_L3))
+
+    if(sum_L1 + sum_L2 + sum_L3 < W):
+        return L1 + L2 + L3
+
     if sum_L1 + sum_L2 < W:
         return L1 + L2 + (weighted_median(L3, W - (sum_L1 + sum_L2)))
-    if sum_L1 > W:
-        return weighted_median(L1, W)  
+      
 
     #print("===> Seu algorítmo está mal projetado")
+
+def select(L, j):
+    if len(L) < 10:
+        L.sort(key = lambda items : items[0], reverse = False)
+        return L[j]
+    S = []
+    lIndex = 0
+    while lIndex+5 < len(L)-1:
+        S.append(L[lIndex:lIndex+5])
+        lIndex += 5
+    S.append(L[lIndex:])
+    Meds = []
+    for subList in S:
+        Meds.append(select(subList, int((len(subList)-1)/2)))
+    med = select(Meds, int((len(Meds)-1)/2))
+    L1 = []
+    L2 = []
+    L3 = []
+    for i in L:
+        if i[0] < med[0]:
+            L1.append(i)
+        elif i[0] > med[0]:
+            L3.append(i)
+        else:
+            L2.append(i)
+    if j < len(L1):
+        return select(L1, j)
+    elif j < len(L2) + len(L1):
+        return L2[0]
+    else:
+        return select(L3, j-len(L1)-len(L2))
+
+'''
 def select(items, k):
 
-    if(len(items) == 1):
-        #print("===> Um item")
-        #print(items)
-        return items[0]
+    if(len(items)<=100):
+        items.sort(key = lambda items : items[0], reverse = False)
+        return items[math.floor(len(items)/2)]
+   
     S = []
     lIndex = 0
     while lIndex+5 < len(items):
@@ -94,60 +133,15 @@ def select(items, k):
     for subList in S:
         subList.sort(key = lambda subList : subList[0], reverse = False)
         #Calcula mediana das medianas recursivamente a partir do agrupamento das medianas dos grupos de 5 items
-        medianas.append(subList[math.ceil(len(subList)/2) - 1])
+        medianas.append(subList[math.floor(len(subList)/2)])
         #print(subList)
     #print(medianas)
 
-    median = select(medianas, math.ceil(len(medianas)/2) - 1)
+    median = select(medianas, math.floor(len(medianas)/2))
 
-    #print("===> Mediana encontrada:")
-    #print(median)
-    #print("===> Arranging")
-    #print(items)
+    return median
+'''
 
-    L1 = [] # Itens com valor/peso < que a mediana
-    L2 = [] # Itens com valor/peso = que a mediana
-    L3 = [] # Itens com valor/peso > que a mediana 
-
-    for item in items:
-        if item[0] < median[0]:
-            L1.append(item)
-        elif item[0] ==  median[0]:
-            L2.append(item)
-        else:
-            L3.append(item)
-
-    A = L1 + L2 + L3
-
-    #print("===> A")
-    #print(A)
-    #print("===> Median atual")
-    #print(median)
-    j = 0
-    count = 0
-    for item in A:
-        if(item == median):
-            j = count
-        count += 1
-
-    #print("===> J")
-    #print(j)
-    #print("===> K")
-    #print(k)
-
-    if(k < j):
-        #print("===> <")
-        #print(A[0:j])
-        return select(A[0:j],k)
-    elif(k == j):
-        #print("===> ==")
-        #print(median)
-        return median
-    else:
-        #print("===> >")
-        #print(A[j+1:len(A)])
-        return select(A[j+1:len(A)],k-j) 
-    
 def prepara_items(items):
     items_tmp = []
     for nome, peso, valor in items:

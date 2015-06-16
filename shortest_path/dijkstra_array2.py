@@ -1,8 +1,23 @@
 import sys
 import time
 import networkx as nx
-import avl as avl
+import matplotlib.pyplot as plt
 
+
+def extract_min(G, Q):
+    if len(Q) == 0:
+        return None
+
+    d = sys.maxsize
+    u = None
+    for node in Q:
+        if G.node[node]['d'] < d:
+            u = node
+            d = G.node[node]['d']
+    if u == None:
+        u = Q[0]
+    Q.remove(u)
+    return u
 
 
 def dijkstra(G, s):
@@ -16,31 +31,16 @@ def dijkstra(G, s):
     
     S = [] #Guarda o caminho mais curto
 
-    Q = avl.AVL()
-    for node in G.nodes():
-        Q.insert([G.node[node]['d'], node, node])
+    Q = G.nodes()
 
-    while Q.root != None:
-        tree_node = Q.delete_min()
-        u = tree_node.label
-        S.append(u)
+    while len(Q) != 0:
+        u = extract_min(G, Q)
         print(u)
+        S.append(u)
 
-        #print(G.neighbors(u))
         for v in G.neighbors(u):
             if G.node[v]['d'] > G.node[u]['d'] + G.edge[u][v]['weight']:
-                #Localiza vértice a ser atualizado
-                node = Q.find([G.node[v]['d'], v])
-
-
-                #remove vertice desatualizado
-                if node != None:
-                    Q.remove(node)
-                    #Atualiza distância do vertíce
-                    G.node[v]['d'] = G.node[u]['d'] + G.edge[u][v]['weight']
-                    Q.insert([G.node[v]['d'], v, v])
-                else:
-                    G.node[v]['d'] = G.node[u]['d'] + G.edge[u][v]['weight'] 
+                G.node[v]['d'] = G.node[u]['d'] + G.edge[u][v]['weight']
                 G.node[v]['py'] = u
     return S
     
@@ -48,7 +48,7 @@ if __name__ == '__main__':
 
     G = nx.DiGraph()
 
-    f = open('instancias/avl/alut2010.stp','r+')
+    f = open('instancias/array/dmxa0903.stp','r+')
 
 
     for linha in f.readlines():

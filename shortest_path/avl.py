@@ -97,9 +97,11 @@ Supports insert, find, and delete-min operations in O(lg n) time.
                 self.swap_with_sucessor_and_remove(node)
 
     def remove_leaf(self, node):
+        print
         parent = node.parent
         if(parent):
             if(not parent.left == None and parent.left.key == node.key and parent.left.label == node.label):
+                #print("===> Setting parent left to none")
                 parent.left = None
             else:
                 parent.right = None
@@ -114,6 +116,7 @@ Supports insert, find, and delete-min operations in O(lg n) time.
             if not balance in [-1, 0, 1]:
                 self.rebalance(node)
             node = node.parent
+
 
     def remove_branch(self, node):
         parent = node.parent
@@ -137,33 +140,33 @@ Supports insert, find, and delete-min operations in O(lg n) time.
             node = node.parent
 
     def swap_with_sucessor_and_remove (self, node):
+        #print("===> Node to remove: {0}".format(node.label))
+
         successor = self.find_smallest(node.right)
+
+        #print("===> Node sucessor: {0}".format(successor.label))
         self.swap_nodes (node, successor)
-        print("===> 'Tree after swaping")
-        print(self)
+
         if node.height == 0:
             self.remove_leaf(node)
         else:
             self.remove_branch(node)
             
     def swap_nodes (self, node1, node2):
-        print("===> Swapping nodes {0} e {1}".format(node1.label, node2.label))
-        parent1 = node1.parent #None for root
-        left1 = node1.left #10.2
-        right1 = node1.right #10.5
-        parent2 = node2.parent #10.4
+        parent1 = node1.parent #20.6
+        left1 = node1.left #13.5
+        right1 = node1.right #20.4
+        parent2 = node2.parent #20.3
         left2 = node2.left #None
-        right2 = node2.right #10.6
-        print("===> Step 1")
-        print(self)
+        right2 = node2.right #None
         
         # swap heights
-        tmp = node1.height #2
-        node1.height = node2.height #1
-        node2.height = tmp #2
+        tmp = node1.height #1
+        node1.height = node2.height #0
+        node2.height = tmp #1
        
         if not parent1 == None:
-            if not parent1 == None and parent1.left.key == node1.key and parent1.left.label == node1.left.label:
+            if (not parent1 == None) and parent1.left.key == node1.key and parent1.left.label == node1.label:
                 parent1.left = node2
             else:
                 parent1.right = node2
@@ -171,9 +174,6 @@ Supports insert, find, and delete-min operations in O(lg n) time.
         else:
             self.rootNode = node2
             node2.parent = None
-        
-        print("===> Step 2")
-        print(self)
 
         node2.left = left1
         left1.parent = node2
@@ -190,8 +190,10 @@ Supports insert, find, and delete-min operations in O(lg n) time.
         else:
             node2.right = node1
             node1.parent = node2  
-        print("===> Step 3")
-        print(self) 
+
+        if not self.root == None and (self.root.key == node1.key and self.root.label == node1.label):
+            self.root = node2
+
 
     def find(self,t):
         t_key = t[0]
