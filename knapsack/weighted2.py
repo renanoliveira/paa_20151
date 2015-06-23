@@ -8,6 +8,7 @@ import math
 
 # O(n)
 def weighted_median(items, W):
+    #Se |items| == 0, não há items para adicionar a mochila
     if(len(items) == 0):
         return []
 
@@ -20,19 +21,8 @@ def weighted_median(items, W):
         tmp.append(item_fracionario)
         return tmp
     
-    Meds = []
-    lIndex = 0
+    median = select (items, math.ceil(len(items)/2) - 1)
 
-    while lIndex+5 < len(items)-1:
-        S_5 = items[lIndex:lIndex+5]
-        S_5.sort(key = lambda S_5 : items[0], reverse = False)
-        Meds.append(S_5[int((len(S_5)-1)/2)])
-        lIndex += 5
-    
-    S_5 = items[lIndex:]
-    Meds.append(S_5[int((len(S_5)-1)/2)])
-    median = select(Meds, int((len(Meds)-1)/2))
-    
     L1 = [] # Itens com valor/peso > que a mediana
     L2 = [] # Itens com valor/peso = que a mediana
     L3 = [] # Itens com valor/peso < que a mediana 
