@@ -10,7 +10,7 @@ if __name__ == "__main__":
 	# Importar dados de instancias
 	files = os.listdir("instancias")
 
-	with open('weighted_median.csv', 'w') as csvfile:
+	with open('weighted_median_constant.csv', 'w') as csvfile:
 		fieldnames = ['instancia', 'tempo_execucao', 'valor_mochila', 'peso_mochila', 'capacidade_mochila', 'peso_total']
 		writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 		writer.writeheader()
@@ -57,7 +57,7 @@ if __name__ == "__main__":
 			print("===> Tempo de execução: {0}".format(elapsed_time/counter))		
 			f.close()
 
-	with open('weighted_pivot.csv', 'w') as csvfile:
+	with open('weighted_pivot_contant.csv', 'w') as csvfile:
 		fieldnames = ['instancia', 'tempo_execucao', 'valor_mochila', 'peso_mochila', 'capacidade_mochila', 'peso_total']
 		writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 		writer.writeheader()
@@ -105,7 +105,7 @@ if __name__ == "__main__":
 			f.close()
 
 
-	with open('greedy.csv', 'w') as csvfile:
+	with open('greedy_constant.csv', 'w') as csvfile:
 		fieldnames = ['instancia', 'tempo_execucao', 'valor_mochila', 'peso_mochila', 'capacidade_mochila', 'peso_total']
 		writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 		writer.writeheader()
