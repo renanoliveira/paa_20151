@@ -15,7 +15,6 @@ def karatsuba(A, B):
 		N = degree
 
 	if(degree == 0):
-		print("returning for N = 1: {0}*{1}".format(A[0], B[0]))
 		return [A[0]*B[0]]
 
 	split_at = math.ceil((degree+1)/2)

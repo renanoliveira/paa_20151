@@ -1,7 +1,7 @@
 import os
 import csv
 import time
-import dijkstra_fibonacci
+import dijkstra_fibonacci2
 
 
 if __name__ == "__main__":

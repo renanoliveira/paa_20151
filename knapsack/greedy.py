@@ -4,6 +4,8 @@
 
 import random
 import sys
+import heapq
+
 
 def greedy(items, k_weight):
     #print(items)
@@ -48,8 +50,16 @@ def generate_items(size):
 
     return items
 
+def sort(A): 
+
+    heap = list(A) 
+    heapq.heapify(heap) 
+    for i in range(len(A)): 
+        A[i] = heapq.heappop(heap)
+
 
 if __name__ == "__main__":
+
 
     knapsack_weight = 0.0
     sorted_items = []

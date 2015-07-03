@@ -10,6 +10,36 @@ def height(node):
 def update_height(node):
     node.height = max(height(node.left), height(node.right)) + 1   
 
+def build_alfa(S):
+        alfa_tree = AVL()
+        
+        if(len(S) == 1):
+            alfa_tree.insert([S[0].key, S[0].label, S[0].vertex])
+            return alfa_tree
+
+
+        median_position = (len(S)//2)
+        median_node = S[median_position]
+        alfa_tree.insert([median_node.key, median_node.label, median_node.vertex])
+
+        S_ = S[0:median_position]
+        if len(S_) == 2:
+
+            alfa_tree.insert([median_node.key, median_node.label, median_node.vertex])
+
+        left_tree.root.parent = alfa_tree.root
+        alfa_tree.root.left = left_tree.root
+
+        if len(S) == 2:
+            right_tree = build_alfa([S[1]])
+        else:
+            right_tree = build_alfa(S[median_position+1:len(S)])
+
+        right_tree.root.parent = alfa_tree.root
+        alfa_tree.root.right = right_tree.root
+
+        return  alfa_tree
+
 
 class AVL(bst.BST):
     """
@@ -79,6 +109,19 @@ Supports insert, find, and delete-min operations in O(lg n) time.
         while node.left:
             node = node.left
         return node
+
+    def inorder(self, node, S):
+
+        if(node is None):
+            return 
+
+        self.inorder(node.left, S)
+
+        S.append(node)
+
+        self.inorder(node.right, S)
+
+        return S
 
     def delete_min(self):
         node, parent = bst.BST.delete_min(self)

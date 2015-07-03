@@ -1,0 +1,11 @@
+Section Graph
+Nodes 8
+Edges 7
+E 1 2 15
+E 2 3 15
+E 3 4 15
+E 1 5 15
+E 2 6 15
+E 3 7 15
+E 4 8 15
+End

@@ -4,6 +4,7 @@
 import random
 import sys
 import math
+import numpy as np
 
 
 # O(n)
@@ -12,77 +13,60 @@ def weighted_median(items, W):
         return []
 
     #Se |items| == 1 e capacidade da < items[0].peso 
-    if len(items) == 1 and items[0][2] > W:
+    if len(items) == 1 and items[0][1] > W:
         tmp = []
         #print("===> Peso fracionario: {0}".format(peso_fracionario))
         peso_fracionario = W
-        item_fracionario = (items[0][0], items[0][1], peso_fracionario, items[0][0]*peso_fracionario)
+        item_fracionario = (items[0][2]/items[0][1], items[0][1], peso_fracionario, items[0][2]/items[0][1]*peso_fracionario)
         tmp.append(item_fracionario)
         return tmp
     
+    v_w = []
+    for item in items:  # O(n)
+        item_v_w = (item[2]/item[1])   # O(1)
+        v_w.append(item_v_w)  # O(1)
+
     Meds = []
     lIndex = 0
 
-    while lIndex+5 < len(items)-1:
-        S_5 = items[lIndex:lIndex+5]
-        S_5.sort(key = lambda S_5 : items[0], reverse = False)
-        Meds.append(S_5[int((len(S_5)-1)/2)])
-        lIndex += 5
-    
-    S_5 = items[lIndex:]
-    Meds.append(S_5[int((len(S_5)-1)/2)])
-    median = select(Meds, int((len(Meds)-1)/2))
+    #Calculo da mediana usando partition
+    median = np.partition(v_w, len(v_w)//2)[len(v_w)//2]
     
     L1 = [] # Itens com valor/peso > que a mediana
     L2 = [] # Itens com valor/peso = que a mediana
     L3 = [] # Itens com valor/peso < que a mediana 
 
-    for item in items:
-        #print(item)
-        if item[0] > median[0]:
+    for item in items: #O(n)
+        if item[2]/item[1] > median:
             L1.append(item)
-        elif item[0] ==  median[0]:
+        elif item[2]/item[1] ==  median:
             L2.append(item)
         else:
             L3.append(item)
-    #print(L1)
-    #print(L2)
-    #print(L3)
 
-    #print("Saiu da iteração")
-
-    #print("===> Capacidade da Mochila")
-    #print(W)
-    #print("===> Elementos maiores que a mediada:")
-    #print(L1)
-    #print("===> Elementos iguais a mediada:")
-    #print(L2)
-    #print("===> Elementos menores que a mediana:")
-    #print(L3)
-
-    sum_L1 = sum(item[2] for item in L1)
+    sum_L1 = sum(item[1] for item in L1)
     #print("Soma de pesos de L1: {0}".format(sum_L1))
     if sum_L1 > W:
         return weighted_median(L1, W)
 
-    sum_L2 = sum(item[2] for item in L2)
+    sum_L2 = sum(item[1] for item in L2)
     #print("Soma de pesos de L2: {0}".format(sum_L2))
-    if sum_L1 < W and sum_L1 + sum_L2 >= W:
+    if sum_L1 <= W and sum_L1 + sum_L2 >= W:
         #print("===> Adiciona frações")
         for item in L2:
             #if sum_L1 == W:
              #   break
-            if sum_L1 + item[2] > W:
+            if sum_L1 + item[1] > W:
                 peso_fracionario = W - sum_L1
-                item_fracionario = (item[0], item[1], peso_fracionario, item[0]*peso_fracionario)
+                item_fracionario = (item[0], peso_fracionario, item[2]/item[1]*peso_fracionario, item[2]/item[1])
                 L1.append(item_fracionario)
                 break
             else:
                 L1.append(item)
-                W = W - item[2]
+                W = W - item[1]
         return L1
 
-    sum_L3 = sum(item[2] for item in L3)
+    sum_L3 = sum(item[1] for item in L3)
     #print("Soma de pesos de L3: {0}".format(sum_L3))
 
     if(sum_L1 + sum_L2 + sum_L3 < W):
@@ -93,71 +77,6 @@ def weighted_median(items, W):
       
 
     #print("===> Seu algorítmo está mal projetado")
-
-def select(L, j):
-    if len(L) < 10:
-        L.sort(key = lambda items : items[0], reverse = False)
-        return L[j]
-    S = []
-    lIndex = 0
-    while lIndex+5 < len(L)-1:
-        S.append(L[lIndex:lIndex+5])
-        lIndex += 5
-    S.append(L[lIndex:])
-    Meds = []
-    for subList in S:
-        Meds.append(select(subList, int((len(subList)-1)/2)))
-    med = select(Meds, int((len(Meds)-1)/2))
-    L1 = []
-    L2 = []
-    L3 = []
-    for i in L:
-        if i[0] < med[0]:
-            L1.append(i)
-        elif i[0] > med[0]:
-            L3.append(i)
-        else:
-            L2.append(i)
-    if j < len(L1):
-        return select(L1, j)
-    elif j < len(L2) + len(L1):
-        return L2[0]
-    else:
-        return select(L3, j-len(L1)-len(L2))
-
-'''
-def select(items, k):
-
-    if(len(items)<=100):
-        items.sort(key = lambda items : items[0], reverse = False)
-        return items[math.floor(len(items)/2)]
-   
-    S = []
-    lIndex = 0
-    while lIndex+5 < len(items):
-        S.append(items[lIndex:lIndex+5])
-        lIndex += 5
-    S.append(items[lIndex:])
-
-    medianas = []
-    for subList in S:
-        subList.sort(key = lambda subList : subList[0], reverse = False)
-        #Calcula mediana das medianas recursivamente a partir do agrupamento das medianas dos grupos de 5 items
-        medianas.append(subList[math.floor(len(subList)/2)])
-        #print(subList)
-    #print(medianas)
-
-    median = select(medianas, math.floor(len(medianas)/2))
-
-    return median
-'''
-
-def prepara_items(items):
-    items_tmp = []
-    for nome, peso, valor in items:
-        item_tmp = (valor/peso, nome, peso, valor)
-        items_tmp.append(item_tmp)
-    return items_tmp
 
 def generate_items(size):
     items = []
@@ -210,8 +129,8 @@ if __name__ == "__main__":
     valor = 0
     for item in items_to_add:
         print(item)
-        peso += item[2]
-        valor += item[3]
+        peso += item[1]
+        valor += item[2]
 
     print("===> Peso da mochila: {0}".format(peso))
     print("===> Valor da mochila: {0}".format(valor))

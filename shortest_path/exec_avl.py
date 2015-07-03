@@ -1,7 +1,7 @@
 import os
 import csv
 import time
-import dijkstra_avl
+import dijkstra_avl2
 
 
 if __name__ == "__main__":
@@ -15,7 +15,7 @@ if __name__ == "__main__":
 		for filename in files:
 			g = dijkstra_avl.Graph()
 
-			f = open("instancias/avl/" + filename,'r')
+			f = open("instancias" + filename,'r')
 			f_words = f.read()
 			f_words = f_words.split()
 			f.close()

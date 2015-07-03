@@ -10,7 +10,7 @@ if __name__ == "__main__":
 	# Importar dados de instancias
 	files = os.listdir("instancias")
 
-	with open('weighted_median_constant.csv', 'w') as csvfile:
+	with open('weighted_median_decrescent.csv', 'w') as csvfile:
 		fieldnames = ['instancia', 'tempo_execucao', 'valor_mochila', 'peso_mochila', 'capacidade_mochila', 'peso_total']
 		writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 		writer.writeheader()
@@ -43,21 +43,21 @@ if __name__ == "__main__":
 			elapsed_time = 0
 			t = time.process_time()
 			while elapsed_time < 5:
-				items_to_add = weighted.weighted_median(weighted.prepara_items(items_instancia), capacidade_mochila)
+				items_to_add = weighted.weighted_median(items_instancia, capacidade_mochila)
 				elapsed_time = time.process_time() - t
 				counter = counter + 1
 
 			peso = 0
 			valor = 0
 			for item in items_to_add:
-				peso += item[2]
-				valor += item[3]
+				peso += item[1]
+				valor += item[2]
 
 			writer.writerow({'instancia': qtd_items_instancia, 'tempo_execucao': elapsed_time/counter, 'valor_mochila': valor, 'peso_mochila': peso, 'capacidade_mochila': capacidade_mochila, 'peso_total': peso_total_items})
 			print("===> Tempo de execução: {0}".format(elapsed_time/counter))		
 			f.close()
 
-	with open('weighted_pivot_contant.csv', 'w') as csvfile:
+	with open('weighted_pivot_decrescent.csv', 'w') as csvfile:
 		fieldnames = ['instancia', 'tempo_execucao', 'valor_mochila', 'peso_mochila', 'capacidade_mochila', 'peso_total']
 		writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 		writer.writeheader()
@@ -105,7 +105,7 @@ if __name__ == "__main__":
 			f.close()
 
 
-	with open('greedy_constant.csv', 'w') as csvfile:
+	with open('greedy_decrescent.csv', 'w') as csvfile:
 		fieldnames = ['instancia', 'tempo_execucao', 'valor_mochila', 'peso_mochila', 'capacidade_mochila', 'peso_total']
 		writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 		writer.writeheader()
